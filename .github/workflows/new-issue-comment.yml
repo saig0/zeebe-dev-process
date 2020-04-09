@@ -8,8 +8,8 @@ jobs:
   report:
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    if: ${{ github.event.comment.user.id }} != 63413175
     steps:
+      - if: ${{ github.event.comment.user.id }} != 63413175
       - uses: actions/checkout@v2
       
       - name: Use Node.js 12.x
