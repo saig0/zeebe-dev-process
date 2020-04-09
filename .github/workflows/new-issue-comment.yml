@@ -9,8 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - if: ${{ github.event.comment.user.id }} != 63413175
       - uses: actions/checkout@v2
+      - if: ${{ github.event.comment.user.id }} != 63413175
       
       - name: Use Node.js 12.x
         uses: actions/setup-node@v1
