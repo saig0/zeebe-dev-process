@@ -17,8 +17,8 @@ jobs:
           node-version: 12.x
       
       - name: Create Zeebe Workflow
+        if: ${{ github.event.comment.user.id != 63413175 }}
         uses: jwulf/zeebe-action@master
-        if: ${{ github.event.comment.user.id }} != 63413175
         with:
           clientConfig: ${{ secrets.ZEEBE_CLIENT_CONFIG }}
           operation: publishMessage
