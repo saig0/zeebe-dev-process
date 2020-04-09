@@ -10,7 +10,7 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v2
-      - if: ${{ github.event.comment.user.id }} != 63413175
+      
       
       - name: Use Node.js 12.x
         uses: actions/setup-node@v1
@@ -19,6 +19,7 @@ jobs:
       
       - name: Create Zeebe Workflow
         uses: jwulf/zeebe-action@master
+        if: ${{ github.event.comment.user.id }} != 63413175
         with:
           clientConfig: ${{ secrets.ZEEBE_CLIENT_CONFIG }}
           operation: publishMessage
