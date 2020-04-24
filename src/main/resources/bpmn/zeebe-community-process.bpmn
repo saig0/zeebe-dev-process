@@ -55,7 +55,7 @@
           <zeebe:header key="authorization" value="Bearer {{github_token}}" />
         </zeebe:taskHeaders>
         <zeebe:ioMapping>
-          <zeebe:input source="{&#34;state&#34;:&#34;closed&#34;}" target="body" />
+          <zeebe:input source="&#34;{\&#34;state\&#34;:\&#34;closed\&#34;}&#34;" target="body" />
         </zeebe:ioMapping>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_0bh56xr</bpmn:incoming>
