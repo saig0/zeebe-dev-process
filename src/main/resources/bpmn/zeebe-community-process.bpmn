@@ -1,109 +1,108 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Zeebe Modeler" exporterVersion="0.9.0" camunda:diagramRelationId="55e45cad-3cf0-436e-91b8-e9c67051207a">
-  <bpmn:process id="zeebe-community-process" name="Zeebe Community Process" isExecutable="true">
-    <bpmn:startEvent id="StartEvent_1" name="issue created">
+  <bpmn:process id="zeebe-community-process" name="2 minutes" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_IssueCreated" name="issue created">
       <bpmn:outgoing>SequenceFlow_1uih8ky</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:eventBasedGateway id="ExclusiveGateway_1vtenir">
-      <bpmn:incoming>SequenceFlow_0vmkyfu</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_0248xfc</bpmn:outgoing>
-      <bpmn:outgoing>SequenceFlow_1yvmcvr</bpmn:outgoing>
-    </bpmn:eventBasedGateway>
-    <bpmn:intermediateCatchEvent id="IntermediateCatchEvent_0p3csaw" name="1 minute">
-      <bpmn:incoming>SequenceFlow_0248xfc</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_1kxtyek</bpmn:outgoing>
-      <bpmn:timerEventDefinition id="TimerEventDefinition_0b6gc1b">
-        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT1M</bpmn:timeDuration>
-      </bpmn:timerEventDefinition>
-    </bpmn:intermediateCatchEvent>
-    <bpmn:sequenceFlow id="SequenceFlow_0248xfc" sourceRef="ExclusiveGateway_1vtenir" targetRef="IntermediateCatchEvent_0p3csaw" />
-    <bpmn:intermediateCatchEvent id="IntermediateCatchEvent_1fgbosz" name="new comment">
-      <bpmn:incoming>SequenceFlow_1yvmcvr</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_09mpflv</bpmn:outgoing>
-      <bpmn:messageEventDefinition id="MessageEventDefinition_0fg72pd" messageRef="Message_1abo1hf" />
-    </bpmn:intermediateCatchEvent>
-    <bpmn:sequenceFlow id="SequenceFlow_1yvmcvr" sourceRef="ExclusiveGateway_1vtenir" targetRef="IntermediateCatchEvent_1fgbosz" />
-    <bpmn:sequenceFlow id="SequenceFlow_1kxtyek" sourceRef="IntermediateCatchEvent_0p3csaw" targetRef="ServiceTask_1wczrg1" />
-    <bpmn:exclusiveGateway id="ExclusiveGateway_079m885" name="is planned?" default="SequenceFlow_0vmkyfu">
+    <bpmn:exclusiveGateway id="ExclusiveGateway_IsPlanned" name="is planned?" default="SequenceFlow_0vmkyfu">
+      <bpmn:incoming>Flow_13rfkzc</bpmn:incoming>
       <bpmn:incoming>SequenceFlow_1uih8ky</bpmn:incoming>
-      <bpmn:incoming>SequenceFlow_09mpflv</bpmn:incoming>
-      <bpmn:incoming>SequenceFlow_04uammg</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0vmkyfu</bpmn:outgoing>
       <bpmn:outgoing>SequenceFlow_0t1s6nt</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="SequenceFlow_0vmkyfu" sourceRef="ExclusiveGateway_079m885" targetRef="ExclusiveGateway_1vtenir" />
-    <bpmn:endEvent id="EndEvent_1gn1z1v" name="issue closed">
-      <bpmn:incoming>SequenceFlow_1spnbf8</bpmn:incoming>
+    <bpmn:sequenceFlow id="SequenceFlow_0vmkyfu" sourceRef="ExclusiveGateway_IsPlanned" targetRef="SubProcess_ManageInactivity" />
+    <bpmn:endEvent id="EndEvent_IssueClosed" name="issue closed">
+      <bpmn:incoming>Flow_0nr0l4q</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:sequenceFlow id="SequenceFlow_0t1s6nt" name="has assignee" sourceRef="ExclusiveGateway_079m885" targetRef="IntermediateThrowEvent_08387fj">
+    <bpmn:sequenceFlow id="SequenceFlow_0t1s6nt" name="has&#10;assignee" sourceRef="ExclusiveGateway_IsPlanned" targetRef="Intermediate_MessageEvent_IssueClosed">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">issue.assignee != null</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="SequenceFlow_1hi1lqi" sourceRef="IntermediateThrowEvent_08387fj" targetRef="ExclusiveGateway_0ui42io" />
-    <bpmn:intermediateCatchEvent id="IntermediateThrowEvent_08387fj" name="closed in github">
+    <bpmn:intermediateCatchEvent id="Intermediate_MessageEvent_IssueClosed" name="closed in github">
       <bpmn:incoming>SequenceFlow_0t1s6nt</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1hi1lqi</bpmn:outgoing>
       <bpmn:messageEventDefinition id="MessageEventDefinition_0ire60y" messageRef="Message_1ol0lre" />
     </bpmn:intermediateCatchEvent>
-    <bpmn:sequenceFlow id="SequenceFlow_1uih8ky" sourceRef="StartEvent_1" targetRef="ExclusiveGateway_079m885" />
-    <bpmn:sequenceFlow id="SequenceFlow_09mpflv" sourceRef="IntermediateCatchEvent_1fgbosz" targetRef="ExclusiveGateway_079m885" />
-    <bpmn:serviceTask id="Task_14o5g1n" name="close issue">
-      <bpmn:extensionElements>
-        <zeebe:taskDefinition type="CAMUNDA-HTTP" />
-        <zeebe:taskHeaders>
-          <zeebe:header key="url" value="{{issue.url}}" />
-          <zeebe:header key="method" value="PATCH" />
-          <zeebe:header key="authorization" value="Bearer {{github_token}}" />
-          <zeebe:header key="body" value="{&#34;state&#34;:&#34;closed&#34;}" />
-        </zeebe:taskHeaders>
-      </bpmn:extensionElements>
-      <bpmn:incoming>SequenceFlow_0bh56xr</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_1ap9g7l</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:eventBasedGateway id="ExclusiveGateway_1cg25oj">
-      <bpmn:incoming>SequenceFlow_1s0q36a</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_1crm8oy</bpmn:outgoing>
-      <bpmn:outgoing>SequenceFlow_1s6toe0</bpmn:outgoing>
-    </bpmn:eventBasedGateway>
-    <bpmn:intermediateCatchEvent id="IntermediateCatchEvent_0lqd2at" name="new comment">
-      <bpmn:incoming>SequenceFlow_1crm8oy</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_04uammg</bpmn:outgoing>
-      <bpmn:messageEventDefinition messageRef="Message_1abo1hf" />
-    </bpmn:intermediateCatchEvent>
-    <bpmn:sequenceFlow id="SequenceFlow_1crm8oy" sourceRef="ExclusiveGateway_1cg25oj" targetRef="IntermediateCatchEvent_0lqd2at" />
-    <bpmn:intermediateCatchEvent id="IntermediateCatchEvent_14m2561" name="1 minute">
-      <bpmn:incoming>SequenceFlow_1s6toe0</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_0bh56xr</bpmn:outgoing>
-      <bpmn:timerEventDefinition>
-        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT1M</bpmn:timeDuration>
-      </bpmn:timerEventDefinition>
-    </bpmn:intermediateCatchEvent>
-    <bpmn:sequenceFlow id="SequenceFlow_1s6toe0" sourceRef="ExclusiveGateway_1cg25oj" targetRef="IntermediateCatchEvent_14m2561" />
-    <bpmn:sequenceFlow id="SequenceFlow_0bh56xr" sourceRef="IntermediateCatchEvent_14m2561" targetRef="Task_14o5g1n" />
-    <bpmn:sequenceFlow id="SequenceFlow_04uammg" sourceRef="IntermediateCatchEvent_0lqd2at" targetRef="ExclusiveGateway_079m885" />
-    <bpmn:serviceTask id="ServiceTask_1wczrg1" name="remind author">
-      <bpmn:extensionElements>
-        <zeebe:taskDefinition type="CAMUNDA-HTTP" />
-        <zeebe:taskHeaders>
-          <zeebe:header key="url" value="{{issue.url}}/comments" />
-          <zeebe:header key="method" value="POST" />
-          <zeebe:header key="authorization" value="Bearer {{github_token}}" />
-          <zeebe:header key="body" value="{&#34;body&#34;:&#34;This issue seems to be inactive, please comment if this issue is still considered useful or the issue will be closed.&#34;}" />
-        </zeebe:taskHeaders>
-        <zeebe:ioMapping>
-          <zeebe:output source="statusCode" target="statusCode" />
-        </zeebe:ioMapping>
-      </bpmn:extensionElements>
-      <bpmn:incoming>SequenceFlow_1kxtyek</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_1s0q36a</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="SequenceFlow_1s0q36a" sourceRef="ServiceTask_1wczrg1" targetRef="ExclusiveGateway_1cg25oj" />
-    <bpmn:sequenceFlow id="SequenceFlow_1ap9g7l" sourceRef="Task_14o5g1n" targetRef="ExclusiveGateway_0ui42io" />
-    <bpmn:exclusiveGateway id="ExclusiveGateway_0ui42io">
-      <bpmn:incoming>SequenceFlow_1ap9g7l</bpmn:incoming>
+    <bpmn:sequenceFlow id="SequenceFlow_1uih8ky" sourceRef="StartEvent_IssueCreated" targetRef="ExclusiveGateway_IsPlanned" />
+    <bpmn:subProcess id="SubProcess_ManageInactivity" name="Manage inactivity">
+      <bpmn:incoming>SequenceFlow_0vmkyfu</bpmn:incoming>
+      <bpmn:outgoing>Flow_0p37ui8</bpmn:outgoing>
+      <bpmn:startEvent id="Sub_StartEvent_ManageInactivity">
+        <bpmn:outgoing>Flow_072d3ui</bpmn:outgoing>
+      </bpmn:startEvent>
+      <bpmn:intermediateCatchEvent id="TimerEvent_1" name="2 minutes">
+        <bpmn:incoming>Flow_072d3ui</bpmn:incoming>
+        <bpmn:outgoing>Flow_02btmgq</bpmn:outgoing>
+        <bpmn:timerEventDefinition id="TimerEventDefinition_06nvu5r">
+          <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT2M</bpmn:timeDuration>
+        </bpmn:timerEventDefinition>
+      </bpmn:intermediateCatchEvent>
+      <bpmn:sequenceFlow id="Flow_072d3ui" sourceRef="Sub_StartEvent_ManageInactivity" targetRef="TimerEvent_1" />
+      <bpmn:sequenceFlow id="Flow_02btmgq" sourceRef="TimerEvent_1" targetRef="ServiceTask_RemindAuthor" />
+      <bpmn:intermediateCatchEvent id="TimerEvent_2" name="2 minute">
+        <bpmn:incoming>Flow_1ldk8w7</bpmn:incoming>
+        <bpmn:outgoing>Flow_1msh3xs</bpmn:outgoing>
+        <bpmn:timerEventDefinition id="TimerEventDefinition_109b4di">
+          <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT2M</bpmn:timeDuration>
+        </bpmn:timerEventDefinition>
+      </bpmn:intermediateCatchEvent>
+      <bpmn:sequenceFlow id="Flow_1msh3xs" sourceRef="TimerEvent_2" targetRef="ServiceTask_CloseIssue" />
+      <bpmn:endEvent id="Sub_EndEvent_ManageInactivity">
+        <bpmn:incoming>Flow_1scejo4</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:serviceTask id="ServiceTask_RemindAuthor" name="remind author">
+        <bpmn:extensionElements>
+          <zeebe:taskDefinition type="CAMUNDA-HTTP" />
+          <zeebe:taskHeaders>
+            <zeebe:header key="url" value="{{issue.url}}/comments" />
+            <zeebe:header key="method" value="POST" />
+            <zeebe:header key="authorization" value="Bearer {{github_token}}" />
+            <zeebe:header key="body" value="{&#34;body&#34;:&#34;This issue seems to be inactive, please comment if this issue is still considered useful or the issue will be closed.&#34;}" />
+          </zeebe:taskHeaders>
+          <zeebe:ioMapping>
+            <zeebe:output source="statusCode" target="reminderStatusCode" />
+          </zeebe:ioMapping>
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_02btmgq</bpmn:incoming>
+        <bpmn:outgoing>Flow_1ldk8w7</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:sequenceFlow id="Flow_1ldk8w7" sourceRef="ServiceTask_RemindAuthor" targetRef="TimerEvent_2" />
+      <bpmn:serviceTask id="ServiceTask_CloseIssue" name="close issue">
+        <bpmn:extensionElements>
+          <zeebe:taskDefinition type="CAMUNDA-HTTP" />
+          <zeebe:taskHeaders>
+            <zeebe:header key="url" value="{{issue.url}}" />
+            <zeebe:header key="method" value="PATCH" />
+            <zeebe:header key="authorization" value="Bearer {{github_token}}" />
+            <zeebe:header key="body" value="{&#34;state&#34;:&#34;closed&#34;}" />
+          </zeebe:taskHeaders>
+          <zeebe:ioMapping>
+            <zeebe:output source="statusCode" target="closingStatusCode" />
+          </zeebe:ioMapping>
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_1msh3xs</bpmn:incoming>
+        <bpmn:outgoing>Flow_1scejo4</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:sequenceFlow id="Flow_1scejo4" sourceRef="ServiceTask_CloseIssue" targetRef="Sub_EndEvent_ManageInactivity" />
+    </bpmn:subProcess>
+    <bpmn:boundaryEvent id="Boundary_MessageEvent_NewComment" name="new comment" attachedToRef="SubProcess_ManageInactivity">
+      <bpmn:outgoing>Flow_13rfkzc</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_1kcp58y" messageRef="Message_1abo1hf" />
+    </bpmn:boundaryEvent>
+    <bpmn:boundaryEvent id="Boundary_MessageEvent_IssueClosed" name="closed in github" attachedToRef="SubProcess_ManageInactivity">
+      <bpmn:outgoing>Flow_0go6clx</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_1agq7xz" messageRef="Message_1ol0lre" />
+    </bpmn:boundaryEvent>
+    <bpmn:sequenceFlow id="Flow_13rfkzc" sourceRef="Boundary_MessageEvent_NewComment" targetRef="ExclusiveGateway_IsPlanned" />
+    <bpmn:exclusiveGateway id="ExclusiveGateway_IssueClosed">
+      <bpmn:incoming>Flow_0p37ui8</bpmn:incoming>
       <bpmn:incoming>SequenceFlow_1hi1lqi</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_1spnbf8</bpmn:outgoing>
+      <bpmn:incoming>Flow_0go6clx</bpmn:incoming>
+      <bpmn:outgoing>Flow_0nr0l4q</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="SequenceFlow_1spnbf8" sourceRef="ExclusiveGateway_0ui42io" targetRef="EndEvent_1gn1z1v" />
+    <bpmn:sequenceFlow id="Flow_0nr0l4q" sourceRef="ExclusiveGateway_IssueClosed" targetRef="EndEvent_IssueClosed" />
+    <bpmn:sequenceFlow id="Flow_0p37ui8" sourceRef="SubProcess_ManageInactivity" targetRef="ExclusiveGateway_IssueClosed" />
+    <bpmn:sequenceFlow id="SequenceFlow_1hi1lqi" sourceRef="Intermediate_MessageEvent_IssueClosed" targetRef="ExclusiveGateway_IssueClosed" />
+    <bpmn:sequenceFlow id="Flow_0go6clx" sourceRef="Boundary_MessageEvent_IssueClosed" targetRef="ExclusiveGateway_IssueClosed" />
   </bpmn:process>
   <bpmn:message id="Message_1abo1hf" name="new comment">
     <bpmn:extensionElements>
@@ -117,139 +116,133 @@
   </bpmn:message>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="zeebe-community-process">
-      <bpmndi:BPMNEdge id="SequenceFlow_1spnbf8_di" bpmnElement="SequenceFlow_1spnbf8">
-        <di:waypoint x="1285" y="290" />
-        <di:waypoint x="1332" y="290" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="SequenceFlow_1ap9g7l_di" bpmnElement="SequenceFlow_1ap9g7l">
-        <di:waypoint x="1190" y="290" />
-        <di:waypoint x="1235" y="290" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="SequenceFlow_1s0q36a_di" bpmnElement="SequenceFlow_1s0q36a">
-        <di:waypoint x="800" y="290" />
-        <di:waypoint x="865" y="290" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="SequenceFlow_04uammg_di" bpmnElement="SequenceFlow_04uammg">
-        <di:waypoint x="990" y="170" />
-        <di:waypoint x="990" y="80" />
-        <di:waypoint x="320" y="80" />
-        <di:waypoint x="320" y="265" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="SequenceFlow_0bh56xr_di" bpmnElement="SequenceFlow_0bh56xr">
-        <di:waypoint x="1008" y="290" />
-        <di:waypoint x="1090" y="290" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="SequenceFlow_1s6toe0_di" bpmnElement="SequenceFlow_1s6toe0">
-        <di:waypoint x="915" y="290" />
-        <di:waypoint x="972" y="290" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="SequenceFlow_1crm8oy_di" bpmnElement="SequenceFlow_1crm8oy">
-        <di:waypoint x="890" y="265" />
-        <di:waypoint x="890" y="170" />
-        <di:waypoint x="972" y="170" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="SequenceFlow_09mpflv_di" bpmnElement="SequenceFlow_09mpflv">
-        <di:waypoint x="620" y="152" />
-        <di:waypoint x="620" y="80" />
-        <di:waypoint x="320" y="80" />
-        <di:waypoint x="320" y="265" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_1uih8ky_di" bpmnElement="SequenceFlow_1uih8ky">
-        <di:waypoint x="208" y="290" />
-        <di:waypoint x="295" y="290" />
+        <di:waypoint x="238" y="230" />
+        <di:waypoint x="355" y="230" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_1hi1lqi_di" bpmnElement="SequenceFlow_1hi1lqi">
-        <di:waypoint x="508" y="400" />
-        <di:waypoint x="1260" y="400" />
-        <di:waypoint x="1260" y="315" />
+        <di:waypoint x="1150" y="412" />
+        <di:waypoint x="1150" y="380" />
+        <di:waypoint x="1355" y="380" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_0t1s6nt_di" bpmnElement="SequenceFlow_0t1s6nt">
-        <di:waypoint x="320" y="315" />
-        <di:waypoint x="320" y="400" />
-        <di:waypoint x="472" y="400" />
+        <di:waypoint x="380" y="255" />
+        <di:waypoint x="380" y="430" />
+        <di:waypoint x="1132" y="430" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="327" y="373" width="65" height="14" />
+          <dc:Bounds x="387" y="286" width="45" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_0vmkyfu_di" bpmnElement="SequenceFlow_0vmkyfu">
-        <di:waypoint x="345" y="290" />
-        <di:waypoint x="465" y="290" />
+        <di:waypoint x="405" y="230" />
+        <di:waypoint x="465" y="230" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="SequenceFlow_1kxtyek_di" bpmnElement="SequenceFlow_1kxtyek">
-        <di:waypoint x="638" y="290" />
-        <di:waypoint x="700" y="290" />
+      <bpmndi:BPMNEdge id="Flow_13rfkzc_di" bpmnElement="Flow_13rfkzc">
+        <di:waypoint x="634" y="112" />
+        <di:waypoint x="634" y="80" />
+        <di:waypoint x="300" y="80" />
+        <di:waypoint x="300" y="230" />
+        <di:waypoint x="355" y="230" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="SequenceFlow_1yvmcvr_di" bpmnElement="SequenceFlow_1yvmcvr">
-        <di:waypoint x="490" y="265" />
-        <di:waypoint x="490" y="170" />
-        <di:waypoint x="602" y="170" />
+      <bpmndi:BPMNEdge id="Flow_0go6clx_di" bpmnElement="Flow_0go6clx">
+        <di:waypoint x="1150" y="348" />
+        <di:waypoint x="1150" y="380" />
+        <di:waypoint x="1355" y="380" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="SequenceFlow_0248xfc_di" bpmnElement="SequenceFlow_0248xfc">
-        <di:waypoint x="515" y="290" />
-        <di:waypoint x="602" y="290" />
+      <bpmndi:BPMNEdge id="Flow_0nr0l4q_di" bpmnElement="Flow_0nr0l4q">
+        <di:waypoint x="1405" y="380" />
+        <di:waypoint x="1452" y="380" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
-        <dc:Bounds x="172" y="272" width="36" height="36" />
+      <bpmndi:BPMNEdge id="Flow_0p37ui8_di" bpmnElement="Flow_0p37ui8">
+        <di:waypoint x="1310" y="230" />
+        <di:waypoint x="1380" y="230" />
+        <di:waypoint x="1380" y="355" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="IntermediateCatchEvent_1mvvzz6_di" bpmnElement="Intermediate_MessageEvent_IssueClosed">
+        <dc:Bounds x="1132" y="412" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="157" y="315" width="66" height="14" />
+          <dc:Bounds x="1161" y="393" width="77" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="EventBasedGateway_06xua66_di" bpmnElement="ExclusiveGateway_1vtenir">
-        <dc:Bounds x="465" y="265" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="IntermediateCatchEvent_0p3csaw_di" bpmnElement="IntermediateCatchEvent_0p3csaw">
-        <dc:Bounds x="602" y="272" width="36" height="36" />
+      <bpmndi:BPMNShape id="ExclusiveGateway_079m885_di" bpmnElement="ExclusiveGateway_IsPlanned" isMarkerVisible="true">
+        <dc:Bounds x="355" y="205" width="50" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="600" y="315" width="43" height="14" />
+          <dc:Bounds x="351" y="181" width="57" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="IntermediateCatchEvent_1fgbosz_di" bpmnElement="IntermediateCatchEvent_1fgbosz">
-        <dc:Bounds x="602" y="152" width="36" height="36" />
+      <bpmndi:BPMNShape id="Gateway_0lvb6uk_di" bpmnElement="ExclusiveGateway_IssueClosed" isMarkerVisible="true">
+        <dc:Bounds x="1355" y="355" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_1gn1z1v_di" bpmnElement="EndEvent_IssueClosed">
+        <dc:Bounds x="1452" y="362" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="586" y="195" width="69" height="14" />
+          <dc:Bounds x="1439" y="403" width="61" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="ExclusiveGateway_079m885_di" bpmnElement="ExclusiveGateway_079m885" isMarkerVisible="true">
-        <dc:Bounds x="295" y="265" width="50" height="50" />
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_IssueCreated">
+        <dc:Bounds x="202" y="212" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="292" y="322" width="57" height="14" />
+          <dc:Bounds x="187" y="255" width="66" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="EndEvent_1gn1z1v_di" bpmnElement="EndEvent_1gn1z1v">
-        <dc:Bounds x="1332" y="272" width="36" height="36" />
+      <bpmndi:BPMNShape id="Activity_0ml8cbc_di" bpmnElement="SubProcess_ManageInactivity" isExpanded="true">
+        <dc:Bounds x="465" y="130" width="845" height="200" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_072d3ui_di" bpmnElement="Flow_072d3ui">
+        <di:waypoint x="541" y="230" />
+        <di:waypoint x="622" y="230" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_02btmgq_di" bpmnElement="Flow_02btmgq">
+        <di:waypoint x="658" y="230" />
+        <di:waypoint x="740" y="230" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1msh3xs_di" bpmnElement="Flow_1msh3xs">
+        <di:waypoint x="958" y="230" />
+        <di:waypoint x="1030" y="230" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1ldk8w7_di" bpmnElement="Flow_1ldk8w7">
+        <di:waypoint x="840" y="230" />
+        <di:waypoint x="922" y="230" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1scejo4_di" bpmnElement="Flow_1scejo4">
+        <di:waypoint x="1130" y="230" />
+        <di:waypoint x="1222" y="230" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_1hhpm0s_di" bpmnElement="Sub_StartEvent_ManageInactivity">
+        <dc:Bounds x="505" y="212" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0jrag00_di" bpmnElement="TimerEvent_1">
+        <dc:Bounds x="622" y="212" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1319" y="313" width="61" height="14" />
+          <dc:Bounds x="618" y="255" width="48" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="IntermediateCatchEvent_1mvvzz6_di" bpmnElement="IntermediateThrowEvent_08387fj">
-        <dc:Bounds x="472" y="382" width="36" height="36" />
+      <bpmndi:BPMNShape id="Event_06yambx_di" bpmnElement="TimerEvent_2">
+        <dc:Bounds x="922" y="212" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="452" y="425" width="77" height="14" />
+          <dc:Bounds x="919" y="255" width="43" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="ServiceTask_0j5u4xz_di" bpmnElement="Task_14o5g1n">
-        <dc:Bounds x="1090" y="250" width="100" height="80" />
+      <bpmndi:BPMNShape id="ServiceTask_1wczrg1_di" bpmnElement="ServiceTask_RemindAuthor">
+        <dc:Bounds x="740" y="190" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="EventBasedGateway_0j4j0l6_di" bpmnElement="ExclusiveGateway_1cg25oj">
-        <dc:Bounds x="865" y="265" width="50" height="50" />
+      <bpmndi:BPMNShape id="ServiceTask_0j5u4xz_di" bpmnElement="ServiceTask_CloseIssue">
+        <dc:Bounds x="1030" y="190" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="IntermediateCatchEvent_0lqd2at_di" bpmnElement="IntermediateCatchEvent_0lqd2at">
-        <dc:Bounds x="972" y="152" width="36" height="36" />
+      <bpmndi:BPMNShape id="Event_001w05s_di" bpmnElement="Sub_EndEvent_ManageInactivity">
+        <dc:Bounds x="1222" y="212" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0nugx27_di" bpmnElement="Boundary_MessageEvent_NewComment">
+        <dc:Bounds x="616" y="112" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="956" y="195" width="69" height="14" />
+          <dc:Bounds x="549" y="93" width="69" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="IntermediateCatchEvent_14m2561_di" bpmnElement="IntermediateCatchEvent_14m2561">
-        <dc:Bounds x="972" y="272" width="36" height="36" />
+      <bpmndi:BPMNShape id="Event_17ivz0u_di" bpmnElement="Boundary_MessageEvent_IssueClosed">
+        <dc:Bounds x="1132" y="312" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="969" y="315" width="43" height="14" />
+          <dc:Bounds x="1161" y="355" width="77" height="14" />
         </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="ServiceTask_1wczrg1_di" bpmnElement="ServiceTask_1wczrg1">
-        <dc:Bounds x="700" y="250" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="ExclusiveGateway_0ui42io_di" bpmnElement="ExclusiveGateway_0ui42io" isMarkerVisible="true">
-        <dc:Bounds x="1235" y="265" width="50" height="50" />
       </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
