@@ -9,11 +9,11 @@
       <bpmn:outgoing>SequenceFlow_0248xfc</bpmn:outgoing>
       <bpmn:outgoing>SequenceFlow_1yvmcvr</bpmn:outgoing>
     </bpmn:eventBasedGateway>
-    <bpmn:intermediateCatchEvent id="IntermediateCatchEvent_0p3csaw" name="3 minutes">
+    <bpmn:intermediateCatchEvent id="IntermediateCatchEvent_0p3csaw" name="1 minute">
       <bpmn:incoming>SequenceFlow_0248xfc</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1kxtyek</bpmn:outgoing>
       <bpmn:timerEventDefinition id="TimerEventDefinition_0b6gc1b">
-        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT3M</bpmn:timeDuration>
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT1M</bpmn:timeDuration>
       </bpmn:timerEventDefinition>
     </bpmn:intermediateCatchEvent>
     <bpmn:sequenceFlow id="SequenceFlow_0248xfc" sourceRef="ExclusiveGateway_1vtenir" targetRef="IntermediateCatchEvent_0p3csaw" />
@@ -53,10 +53,8 @@
           <zeebe:header key="url" value="{{issue.url}}" />
           <zeebe:header key="method" value="PATCH" />
           <zeebe:header key="authorization" value="Bearer {{github_token}}" />
+          <zeebe:header key="body" value="{&#34;status&#34;:&#34;closed&#34;}" />
         </zeebe:taskHeaders>
-        <zeebe:ioMapping>
-          <zeebe:input source="&#34;closed&#34;" target="body.state" />
-        </zeebe:ioMapping>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_0bh56xr</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1ap9g7l</bpmn:outgoing>
@@ -72,11 +70,11 @@
       <bpmn:messageEventDefinition messageRef="Message_1abo1hf" />
     </bpmn:intermediateCatchEvent>
     <bpmn:sequenceFlow id="SequenceFlow_1crm8oy" sourceRef="ExclusiveGateway_1cg25oj" targetRef="IntermediateCatchEvent_0lqd2at" />
-    <bpmn:intermediateCatchEvent id="IntermediateCatchEvent_14m2561" name="3 minutes">
+    <bpmn:intermediateCatchEvent id="IntermediateCatchEvent_14m2561" name="1 minute">
       <bpmn:incoming>SequenceFlow_1s6toe0</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0bh56xr</bpmn:outgoing>
       <bpmn:timerEventDefinition>
-        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT3M</bpmn:timeDuration>
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT1M</bpmn:timeDuration>
       </bpmn:timerEventDefinition>
     </bpmn:intermediateCatchEvent>
     <bpmn:sequenceFlow id="SequenceFlow_1s6toe0" sourceRef="ExclusiveGateway_1cg25oj" targetRef="IntermediateCatchEvent_14m2561" />
@@ -91,6 +89,9 @@
           <zeebe:header key="authorization" value="Bearer {{github_token}}" />
           <zeebe:header key="body" value="{&#34;body&#34;:&#34;This issue seems to be inactive, please comment if this issue is still considered useful or the issue will be closed.&#34;}" />
         </zeebe:taskHeaders>
+        <zeebe:ioMapping>
+          <zeebe:output source="statusCode" target="statusCode" />
+        </zeebe:ioMapping>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_1kxtyek</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1s0q36a</bpmn:outgoing>
@@ -199,7 +200,7 @@
       <bpmndi:BPMNShape id="IntermediateCatchEvent_0p3csaw_di" bpmnElement="IntermediateCatchEvent_0p3csaw">
         <dc:Bounds x="602" y="272" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="597" y="315" width="48" height="14" />
+          <dc:Bounds x="600" y="315" width="43" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="IntermediateCatchEvent_1fgbosz_di" bpmnElement="IntermediateCatchEvent_1fgbosz">
@@ -241,7 +242,7 @@
       <bpmndi:BPMNShape id="IntermediateCatchEvent_14m2561_di" bpmnElement="IntermediateCatchEvent_14m2561">
         <dc:Bounds x="972" y="272" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="966" y="315" width="48" height="14" />
+          <dc:Bounds x="969" y="315" width="43" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ServiceTask_1wczrg1_di" bpmnElement="ServiceTask_1wczrg1">
