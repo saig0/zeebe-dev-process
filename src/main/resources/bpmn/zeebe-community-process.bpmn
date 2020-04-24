@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Zeebe Modeler" exporterVersion="0.9.0" camunda:diagramRelationId="55e45cad-3cf0-436e-91b8-e9c67051207a">
-  <bpmn:process id="zeebe-community-process" name="2 minutes" isExecutable="true">
+  <bpmn:process id="zeebe-community-process" name="Zeebe Community Process" isExecutable="true">
     <bpmn:startEvent id="StartEvent_IssueCreated" name="issue created">
       <bpmn:outgoing>SequenceFlow_1uih8ky</bpmn:outgoing>
     </bpmn:startEvent>
@@ -93,16 +93,16 @@
       <bpmn:messageEventDefinition id="MessageEventDefinition_1agq7xz" messageRef="Message_1ol0lre" />
     </bpmn:boundaryEvent>
     <bpmn:sequenceFlow id="Flow_13rfkzc" sourceRef="Boundary_MessageEvent_NewComment" targetRef="ExclusiveGateway_IsPlanned" />
-    <bpmn:exclusiveGateway id="ExclusiveGateway_IssueClosed">
-      <bpmn:incoming>Flow_0p37ui8</bpmn:incoming>
-      <bpmn:incoming>SequenceFlow_1hi1lqi</bpmn:incoming>
-      <bpmn:incoming>Flow_0go6clx</bpmn:incoming>
-      <bpmn:outgoing>Flow_0nr0l4q</bpmn:outgoing>
-    </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="Flow_0nr0l4q" sourceRef="ExclusiveGateway_IssueClosed" targetRef="EndEvent_IssueClosed" />
     <bpmn:sequenceFlow id="Flow_0p37ui8" sourceRef="SubProcess_ManageInactivity" targetRef="ExclusiveGateway_IssueClosed" />
     <bpmn:sequenceFlow id="SequenceFlow_1hi1lqi" sourceRef="Intermediate_MessageEvent_IssueClosed" targetRef="ExclusiveGateway_IssueClosed" />
     <bpmn:sequenceFlow id="Flow_0go6clx" sourceRef="Boundary_MessageEvent_IssueClosed" targetRef="ExclusiveGateway_IssueClosed" />
+    <bpmn:exclusiveGateway id="ExclusiveGateway_IssueClosed">
+      <bpmn:incoming>SequenceFlow_1hi1lqi</bpmn:incoming>
+      <bpmn:incoming>Flow_0go6clx</bpmn:incoming>
+      <bpmn:incoming>Flow_0p37ui8</bpmn:incoming>
+      <bpmn:outgoing>Flow_0nr0l4q</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_0nr0l4q" sourceRef="ExclusiveGateway_IssueClosed" targetRef="EndEvent_IssueClosed" />
   </bpmn:process>
   <bpmn:message id="Message_1abo1hf" name="new comment">
     <bpmn:extensionElements>
@@ -138,8 +138,8 @@
         <di:waypoint x="465" y="230" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_13rfkzc_di" bpmnElement="Flow_13rfkzc">
-        <di:waypoint x="634" y="112" />
-        <di:waypoint x="634" y="80" />
+        <di:waypoint x="640" y="112" />
+        <di:waypoint x="640" y="80" />
         <di:waypoint x="300" y="80" />
         <di:waypoint x="300" y="230" />
         <di:waypoint x="355" y="230" />
@@ -232,16 +232,16 @@
       <bpmndi:BPMNShape id="Event_001w05s_di" bpmnElement="Sub_EndEvent_ManageInactivity">
         <dc:Bounds x="1222" y="212" width="36" height="36" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0nugx27_di" bpmnElement="Boundary_MessageEvent_NewComment">
-        <dc:Bounds x="616" y="112" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="549" y="93" width="69" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_17ivz0u_di" bpmnElement="Boundary_MessageEvent_IssueClosed">
         <dc:Bounds x="1132" y="312" width="36" height="36" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="1161" y="355" width="77" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0nugx27_di" bpmnElement="Boundary_MessageEvent_NewComment">
+        <dc:Bounds x="622" y="112" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="555" y="93" width="69" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
